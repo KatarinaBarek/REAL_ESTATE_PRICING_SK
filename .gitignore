@@ -1,18 +1,8 @@
-# Secrets
-.env
-
-# Model artifact (large binary)
-model.joblib
-
-# Python
+.venv/
 __pycache__/
 *.pyc
-*.pyo
-.pytest_cache/
-
-# CatBoost logs
+.env
+.DS_Store
 catboost_info/
-
-# IDE
-.vscode/
-.idea/
+*.joblib
+.ipynb_checkpoints/

@@ -33,7 +33,17 @@ from feature_engineering import (
 
 # ── 1. Load raw data ──────────────────────────────────────────────────────────
 print("Connecting to database…")
-engine = create_engine(DB_URL)
+engine = create_engine(
+    DB_URL,
+    connect_args={
+        "ssl_disabled": True,
+        "read_timeout": 60,
+        "write_timeout": 60,
+    },
+    pool_size=10,
+    max_overflow=20,
+    pool_pre_ping=True,
+)
 LOAD_COLUMNS = [
     "id", "offer_type", "is_active", "date_archived",
     "price_current", "price_area_usable_per_m2", "price_area_total_per_m2",

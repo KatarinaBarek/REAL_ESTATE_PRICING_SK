@@ -11,6 +11,7 @@ DB_URL = URL.create(
     host=os.getenv("DB_HOST"),
     port=int(os.getenv("DB_PORT", 3306)),
     database=os.getenv("DB_NAME"),
+    query={"ssl_disabled": "true"},
 )
 
 TABLE_NAME = "final_flat_listings"
