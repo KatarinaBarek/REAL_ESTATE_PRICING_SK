@@ -125,10 +125,11 @@ NUMERICAL_FEATURES = [
     "balcony_ratio",
     "dist_nearest_employer",
     "dist_nearest_attraction",
+    "dist_nearest_city",
 ] + list(CITY_COORDS.keys()) + list(EMPLOYER_COORDS.keys()) + list(ATTRACTION_COORDS.keys())
 
 # These are integer-encoded but declared as categorical to CatBoost
-CATEGORICAL_FEATURES = ["locality_region_idx", "condition_name_idx"]
+CATEGORICAL_FEATURES = ["locality_region_idx", "condition_name_idx", "locality_gps_precision_group_idx"]
 
 ALL_FEATURES = NUMERICAL_FEATURES + CATEGORICAL_FEATURES
 
@@ -277,6 +278,29 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
         else:
             df[col] = 0.0
 
+    # Group GPS precision scores into categories for modeling
+    def _gps_precision_group(score):
+        if pd.isna(score):
+            return "unknown"
+        try:
+            score = float(score)
+        except (ValueError, TypeError):
+            return "unknown"
+        if score == 0:
+            return "0"
+        if score == 1:
+            return "1"
+        if 2 <= score <= 4:
+            return "2-4"
+        return ">5"
+
+    df["locality_gps_precision_group"] = df.get("locality_gpsPrecisionScore", pd.NA).apply(_gps_precision_group)
+    df["locality_gps_precision_group_idx"] = pd.Categorical(
+        df["locality_gps_precision_group"],
+        categories=["unknown", "0", "1", "2-4", ">5"],
+        ordered=True,
+    ).codes
+
     # Ground floor flag
     df["is_ground_floor"] = (df["floor_is"] == 0).astype(int)
 
@@ -301,6 +325,10 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     # Min distance to nearest attraction
     attraction_cols = list(ATTRACTION_COORDS.keys())
     df["dist_nearest_attraction"] = df[attraction_cols].min(axis=1)
+
+    # Min distance to nearest major city
+    city_cols = list(CITY_COORDS.keys())
+    df["dist_nearest_city"] = df[city_cols].min(axis=1)
 
     return df
 

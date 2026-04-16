@@ -1,0 +1,14 @@
+Segment,Count,MAE (€),MAPE (%)
+Overall,10237,35361.0,21.0
+Best City,261,21383.0,15.0
+Worst City,2746,55542.0,23.0
+Small Flats (<50m²),1991,21846.0,19.0
+Large Flats (>200m²),97,308844.0,37.0
+Budget (<€50k),102,59568.0,603.0
+Luxury (>€500k),410,200595.0,25.0
+With Balcony,0,,
+Without Balcony,0,,
+With Elevator,0,,
+Without Elevator,0,,
+Ground Floor,544,36454.0,22.0
+Higher Floors,9693,35299.0,21.0

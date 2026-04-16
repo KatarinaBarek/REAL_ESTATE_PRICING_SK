@@ -1,0 +1,14 @@
+{
+  "CatBoost": {
+    "depth": 8,
+    "iterations": 1000
+  },
+  "XGBoost": {
+    "max_depth": 8,
+    "n_estimators": 500
+  },
+  "LightGBM": {
+    "max_depth": 8,
+    "n_estimators": 500
+  }
+}
